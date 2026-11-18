@@ -225,6 +225,20 @@ function validatePayload(data: unknown): VlxPayload {
 }
 
 /**
+ * Parse and validate .vlx text (already read from a file or a URL). Throws
+ * VlxParseError on any failure.
+ */
+export function parseVlxText(text: string): VlxPayload {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch (err) {
+    throw new VlxParseError(`Invalid JSON: ${(err as Error).message}`);
+  }
+  return validatePayload(parsed);
+}
+
+/**
  * Read a File object (from a `<input type="file">` change event or a
  * drop), parse it as JSON, validate, and return the payload. Throws
  * VlxParseError on any failure.
@@ -236,22 +250,13 @@ export async function parseVlxFile(file: File): Promise<VlxPayload> {
   } catch (err) {
     throw new VlxParseError(`Could not read file: ${(err as Error).message}`);
   }
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(text);
-  } catch (err) {
-    throw new VlxParseError(`Invalid JSON: ${(err as Error).message}`);
-  }
-  return validatePayload(parsed);
+  return parseVlxText(text);
 }
 
 /**
- * Convenience wrapper: parse the file AND load its contents into the
- * simulator stores via `loadProjectState`. Returns the parsed payload
- * so the caller can show a confirmation toast or similar.
+ * Load a parsed payload into the simulator + editor stores.
  */
-export async function importVlxFile(file: File): Promise<VlxPayload> {
-  const payload = await parseVlxFile(file);
+export function applyVlxPayload(payload: VlxPayload): void {
   // CRITICAL — sever the current project identity BEFORE mutating any store
   // (same guard as loadExample.ts). With a saved project open, the auto-save
   // hook would otherwise see the imported content as dirty edits on the OLD
@@ -266,5 +271,15 @@ export async function importVlxFile(file: File): Promise<VlxPayload> {
     wires: payload.wires,
     activeBoardId: payload.activeBoardId,
   });
+}
+
+/**
+ * Convenience wrapper: parse the file AND load its contents into the
+ * simulator stores via `loadProjectState`. Returns the parsed payload
+ * so the caller can show a confirmation toast or similar.
+ */
+export async function importVlxFile(file: File): Promise<VlxPayload> {
+  const payload = await parseVlxFile(file);
+  applyVlxPayload(payload);
   return payload;
 }

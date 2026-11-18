@@ -9,6 +9,7 @@ import { ExamplesPage } from './pages/ExamplesPage';
 // the overlay is loaded.
 import { ExampleDetailPage } from './pages/ExampleDetailPage';
 import { ExampleEditorPage } from './pages/ExampleEditorPage';
+import { LabLoaderPage } from './pages/LabLoaderPage';
 import { ImageToCodePage } from './pages/ImageToCodePage';
 import { LocaleSync } from './i18n/LocaleSync';
 import { NON_DEFAULT_LOCALES } from './i18n/config';
@@ -55,6 +56,9 @@ const ROUTES: { path: string; element: ReactElement; index?: boolean }[] = [
   // Singular vs plural is intentional — Google indexes the plural landings.
   { path: 'examples/:exampleId', element: <ExampleDetailPage /> },
   { path: 'example/:exampleId', element: <ExampleEditorPage /> },
+  // /lab#project=<base64url .vlx> or /lab?src=<https url>: a classroom site opens
+  // an assignment's board, code and circuit (see utils/labLink.ts).
+  { path: 'lab', element: <LabLoaderPage /> },
   // Standalone tool: image to monochrome C byte array for OLED displays.
   { path: 'tools/image-to-code', element: <ImageToCodePage /> },
   // Everything a VISITOR sees — landing, about, pricing, docs, the SEO
