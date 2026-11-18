@@ -12,6 +12,8 @@ import { applyStripLayout, STRIP_BELOW_CLASS } from './headerStripFit';
 import './LanguageSwitcher.css';
 
 const GITHUB_URL = 'https://github.com/davidmonterocrespo24/velxio';
+// What this deployment calls itself in the header. The credit to the project it is built on stays next to it.
+const BRAND_NAME = 'Examinus Labs';
 const DISCORD_URL = 'https://discord.gg/3mARjJrh4E';
 
 interface AppHeaderProps {
@@ -142,14 +144,24 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ editorMenu, editorToolbar 
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              aria-hidden="true"
             >
-              <rect x="5" y="5" width="14" height="14" rx="2" />
-              <rect x="9" y="9" width="6" height="6" />
-              <path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4" />
+              <path d="M9 3h6" />
+              <path d="M10 3v6L5 18a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3" />
+              <path d="M7.5 15h9" />
             </svg>
             <Link to={localize('/')} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <span className="header-title">Velxio</span>
+              <span className="header-title">{BRAND_NAME}</span>
             </Link>
+            <a
+              className="header-powered"
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Velxio, the open-source simulator this site runs on (AGPLv3)"
+            >
+              Powered by Velxio
+            </a>
           </div>
 
           {/* Main nav links (web only). The Tauri desktop build hides

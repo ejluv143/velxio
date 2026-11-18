@@ -60,6 +60,24 @@ body {
   letter-spacing: -0.2px;
 }
 
+/* The credit to the open-source project this site is built on, next to the brand. */
+.header-powered {
+  font-size: 11px;
+  color: var(--wb-11);
+  opacity: 0.75;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.header-powered:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+@media (max-width: 900px) {
+  .header-powered {
+    display: none;
+  }
+}
+
 /* Kept for backward compatibility */
 .examples-link {
   display: flex;
